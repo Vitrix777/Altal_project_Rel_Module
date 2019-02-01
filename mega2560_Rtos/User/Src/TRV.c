@@ -113,9 +113,9 @@ pxTimerID = pvTimerGetTimerID(xTimer);
 int Fuzzy(xCompressor *comp,int corection)
 {
 	int steps=0;
-	static int old_corection=0;
-	static int old_corection_1=0;
-	
+	//static int old_corection=0;
+	//static int old_corection_1=0;
+	if(comp->Index==2)xSerialxPrintf(&xSerial3Port,"corection_2 = %d \r\n", corection);
 	if(comp->Src_In<=10 ){steps=(comp->Src_In)/10 * 100 ;}
 		//if(old_corection!=corection){comp->trvCorection=corection-steps;old_corection=corection;}
 		//xSerialxPrintf(&xSerial3Port,"steps_%d = %d \r\n",comp->Index, steps); }//comp->trvCorection;
@@ -130,10 +130,14 @@ int Fuzzy(xCompressor *comp,int corection)
 		//xSerialxPrintf(&xSerial3Port,"steps_%d = %d \r\n",comp->Index, steps);}//comp->trvCorection;
 		
 	//if(old_corection!=corection && comp->Index==1){comp->trvCorection=corection-steps;old_corection=corection;}
-		 if(old_corection_1!=corection && comp->Index==2){comp->trvCorection=corection-steps;old_corection_1=corection;}
-	//xSerialxPrintf(&xSerial3Port,"TRVcorection_%d = %d \r\n",comp->Index, corection);		
+		 //if(old_corection_2!=corection && comp->Index==2){comp->trvCorection=corection-steps;old_corection_2=corection;}
+	//xSerialxPrintf(&xSerial3Port,"TRVcorection_%d = %d \r\n",comp->Index, corection);
+			
+	
+	
+	comp->trvCorection=corection-steps;
 	if(comp->Index==2)xSerialxPrintf(&xSerial3Port,"TRVcorection_2 = %d \r\n", comp->trvCorection);
-	if(comp->Index==2)xSerialxPrintf(&xSerial3Port,"corection_2 = %d \r\n", corection);
+	if(comp->Index==1)xSerialxPrintf(&xSerial3Port,"TRVcorection_1 = %d \r\n", comp->trvCorection);
 	steps=steps+comp->trvCorection;		
 	comp->Steps=steps - comp->Trv_position;
 

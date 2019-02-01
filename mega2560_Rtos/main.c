@@ -223,12 +223,14 @@ ReadSensors(&Comp_1);
 portEXIT_CRITICAL();
 //EEpromData.AireToWater==1 &&
 
-		if(EEpromData.NombComp==2)
+		if(EEpromData.NombComp==2 )
 		{
 			vTaskResume( xHandleSecond );
 			stop_second=false;
+			
 		}
-		else if(EEpromData.NombComp==1 && !stop_second){stop_second=true;Comp_Stop(&Comp_2);}
+		
+		 if(EEpromData.NombComp==1 && !stop_second){stop_second=true;Comp_Stop(&Comp_2);}
 //xSerialxPrintf(&xSerial3Port,"error =%d\r\n",xTaskGetSchedulerState());
 	
 		if(EEpromData.power==1 && !Comp_1.suply && !Comp_1.switchToMode){Comp_1.suply=true;timeTillDef=xTaskGetTickCount();xSerialxPrintf(&xSerial3Port,"On_System_1\r\n");}//xTimerStart(xComutateTrv_1, 0);xTimerStart(xComutateTrv_1, 0);startTrvTimer(&Comp_1);
@@ -242,7 +244,7 @@ portEXIT_CRITICAL();
 		if(Comp_1.suply &&  Comp_1.countError<3)
 		{
 			//>EEpromData.TimeBetweenDef EEpromData.TimeDef
-			/*
+			
 			if(EEpromData.AireToWater==1){
 			xSerialxPrintf(&xSerial3Port,"forsDefrost =%d\r\n",forsDefrost);	
 			if(forsDefrost==1){startDefrost(&Comp_1,&EEpromData);Comp_1.def=true;forsDefrost=0;xSerialxPrintf(&xSerial3Port,"StartForceDEF\r\n");}	
@@ -251,7 +253,7 @@ portEXIT_CRITICAL();
 			else if(Comp_1.def && Comp_1.Src_In>EEpromData.TempStopDef){stopDefrost(&Comp_1,&EEpromData);Comp_1.stopdef=Comp_1.def=false;timeTillDef=xTaskGetTickCount();xSerialxPrintf(&xSerial3Port,"StopDEF\r\n");}
 			
 			}
-			*/
+			
 			if(!init_system){_err1=Check_Erors(&Comp_1,&EEpromData);ADE7758_resetStatus();} else init_system=false;
 				
 			//if(_err1>0 && Comp_1.error==0){Comp_1.error=_err1;Comp_1.countError++;Comp_1.Steps=0;Comp_Stop(&Comp_1);xSerialxPrintf(&xSerial3Port,"error =%d\r\n",Comp_1.error);}//
@@ -281,7 +283,7 @@ vTaskSuspend( xHandleFirst );
 portENTER_CRITICAL();
 ReadSensors(&Comp_2);
 portEXIT_CRITICAL();
-//xSerialxPrintf(&xSerial3Port,"task_2\r\n");
+xSerialxPrintf(&xSerial3Port,"task_2\r\n");
 //xSerialxPrintf(&xSerial3Port,"TRVcorection2= %d \r\n",EEpromData.trv_corection_2);
 vTaskResume( xHandleFirst );
 		if(EEpromData.power==1 && !Comp_2.suply && !Comp_2.switchToMode){Comp_2.suply=true;xSerialxPrintf(&xSerial3Port,"On_System_2\r\n");}//xTimerStart(xComutateTrv_2, 0);startTrvTimer(&Comp_2);

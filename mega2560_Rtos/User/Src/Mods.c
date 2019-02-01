@@ -114,7 +114,7 @@ TickType_t period;
 
 	period=(TickType_t)EEpromData.Revers_Valve_delay;
 	period*=1000;
-	//xSerialxPrintf(&xSerial3Port,"StartSourcePump\r\n");
+	xSerialxPrintf(&xSerial3Port,"R_%d\r\n",comp->Index);
 	if(comp->Index == 1)
 	{
 		
@@ -157,7 +157,7 @@ void StartReversingValve(TimerHandle_t xTimer){
 	static time_t time_count_2;
 	portBASE_TYPE *pxTimerID;
 	pxTimerID = pvTimerGetTimerID(xTimer);
-	//xSerialxPrintf(&xSerial3Port,"StarRevValve\r\n");
+	
 	if((*pxTimerID) == uxStartDelayRevVTimer_1_ID)
 	{	period=(TickType_t)EEpromData.Three_Way_delay;
 		period*=1000;
