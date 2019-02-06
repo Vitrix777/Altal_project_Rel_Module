@@ -1200,12 +1200,13 @@ ISR( USART0_RX_vect )
 if(!port_3)
 {
 port_0=true;
-timer_1_Init();
-start_1_Timer();//my cod
+//timer_1_Init();
+stop_1_Timer();
 TCNT1=0;//my cod		
 frame[indexBuf] = cChar;//my cod
 indexBuf++;//my cod
 if(indexBuf == portSERIAL_BUFFER_RX ) overflow=1;//my cod
+start_1_Timer();//my cod
 }
 		if( ! ringBuffer_IsFull( (ringBuffer_t*) &(xSerialPort.xRxedChars) ) )
 			ringBuffer_Poke( (ringBuffer_t*) &(xSerialPort.xRxedChars), cChar);
@@ -1337,12 +1338,13 @@ ISR( USART3_RX_vect )
 if(!port_0)
 {			//xSerialxPrintf(&xSerial3Port,"port_3\r\n");
 			port_3=true;
-			timer_1_Init();
-			start_1_Timer();//my cod
+			//timer_1_Init();
+			stop_1_Timer();
 			TCNT1=0;//my cod
 			frame[indexBuf] = cChar;//my cod
 			indexBuf++;//my cod
 			if(indexBuf == portSERIAL_BUFFER_RX ) overflow=1;//my cod
+			start_1_Timer();//my cod
 }
 		if( ! ringBuffer_IsFull( (ringBuffer_t*) &(xSerial3Port.xRxedChars) ) )
 			ringBuffer_Poke( (ringBuffer_t*) &(xSerial3Port.xRxedChars), cChar);

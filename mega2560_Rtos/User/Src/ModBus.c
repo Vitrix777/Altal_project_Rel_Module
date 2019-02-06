@@ -11,15 +11,16 @@ void timer_1_Init()
 	// selected time = 1562 us (24992 ticks)
 	// prescaler = 1 (1 ticks ... 4.096 ms)
 	TCCR1B = (1<<WGM12);//|(1<<CS10)
-	OCR1AH = 158;
-	OCR1AL = 96;
+	OCR1AH = 158 ;//158
+	OCR1AL =96;//96
 	stop_1_Timer();
+	
 	
 }
 void start_1_Timer()
 {
 	TIMSK1 |= (1<<OCIE1A);
-	TCCR1B |= (1<<CS10);
+	TCCR1B |= (1<<CS11);//1<<CS10 |
 	
 }
 void stop_1_Timer()
@@ -27,7 +28,7 @@ void stop_1_Timer()
 	TCCR1B &= ~ (1<<CS10);
 	TCNT1=0;
 	TIMSK1 &= ~( _BV( OCIE1A ) );
-	TIFR1 |= _BV( OCF1A ) ;
+	TIFR1 |= _BV( OCF1A );
 }
 
 int readSysReg(xCompressor*compPtr,xEEdata *eeprom,uint16_t adress)

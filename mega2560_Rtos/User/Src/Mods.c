@@ -114,7 +114,7 @@ TickType_t period;
 
 	period=(TickType_t)EEpromData.Revers_Valve_delay;
 	period*=1000;
-	xSerialxPrintf(&xSerial3Port,"R_%d\r\n",comp->Index);
+	xSerialxPrintf(&xSerial3Port,"SoursePump_f_%d\r\n",comp->Index);
 	if(comp->Index == 1)
 	{
 		
@@ -136,6 +136,8 @@ TickType_t period;
 	if(comp->Index == 2)
 	{
 		Comp_2.error=0;
+		Comp_1.switchToMode=true;
+		
 		xSerialxPrintf(&xSerial3Port,"StartSourcePump_2\r\n");
 		
 		if(PIN_SOURCE_PUMP_2 == 0 && !comp->def)

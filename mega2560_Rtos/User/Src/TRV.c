@@ -116,16 +116,21 @@ int Fuzzy(xCompressor *comp,int corection)
 	//static int old_corection=0;
 	//static int old_corection_1=0;
 	if(comp->Index==2)xSerialxPrintf(&xSerial3Port,"corection_2 = %d \r\n", corection);
-	if(comp->Src_In<=10 ){steps=(comp->Src_In)/10 * 100 ;}
+	if(comp->Src_In<=10 && comp->Heating==1 ){steps=(comp->Src_In)/10 * 100 ;}
+	else if(comp->Src_Out<=10 && comp->Cooling==1){steps=(comp->Src_Out)/10 * 100 ;}
 		//if(old_corection!=corection){comp->trvCorection=corection-steps;old_corection=corection;}
 		//xSerialxPrintf(&xSerial3Port,"steps_%d = %d \r\n",comp->Index, steps); }//comp->trvCorection;
-	else if(comp->Src_In>10 && comp->Src_In<=20)  {steps = (comp->Src_In-10)/10 * 100 + 100;}
+	else if(comp->Src_In>10 && comp->Src_In<=20 && comp->Heating==1)  {steps = (comp->Src_In-10)/10 * 100 + 100;}
+	else if(comp->Src_Out>10 && comp->Src_Out<=20 && comp->Cooling==1)  {steps = (comp->Src_Out-10)/10 * 100 + 100;}	
 		//if(old_corection!=corection){comp->trvCorection=corection-steps;old_corection=corection;}
 		//xSerialxPrintf(&xSerial3Port,"steps_%d = %d \r\n",comp->Index, steps); }//;
-	else if(comp->Src_In >20 && comp->Src_In<=30) {steps = (comp->Src_In-20)/10 * 100 + 150;}
+	else if(comp->Src_In >20 && comp->Src_In<=30 && comp->Heating==1) {steps = (comp->Src_In-20)/10 * 100 + 150;}
+	else if(comp->Src_Out >20 && comp->Src_Out<=30 && comp->Cooling==1) {steps = (comp->Src_Out-20)/10 * 100 + 150;}	
+		
 		//if(old_corection!=corection){comp->trvCorection=corection-steps;old_corection=corection;}
 		//xSerialxPrintf(&xSerial3Port,"steps_%d = %d \r\n",comp->Index, steps);}// comp->trvCorection;
-	else if(comp->Src_In>30 && comp->Src_In<=40)  {steps = (comp->Src_In-30)/10 * 100 + 200;}
+	else if(comp->Src_In>30 && comp->Src_In<=40 && comp->Heating==1)  {steps = (comp->Src_In-30)/10 * 100 + 200;}
+	else if(comp->Src_Out>30 && comp->Src_Out<=40 && comp->Cooling==1)  {steps = (comp->Src_Out-30)/10 * 100 + 200;}	
 		//if(old_corection!=corection){comp->trvCorection=corection-steps;old_corection=corection;}		
 		//xSerialxPrintf(&xSerial3Port,"steps_%d = %d \r\n",comp->Index, steps);}//comp->trvCorection;
 		

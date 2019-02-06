@@ -145,7 +145,7 @@ int main(void)
 
 	initPins();
 	ADE7758_Init();
-	//timer_1_Init();
+	timer_1_Init();
 	Comp_1.Index=1;
 	Comp_2.Index=2;
 	//eeprom_write_block((void*)&EEpromData, ( void*)0, sizeof (xEEdata));
@@ -165,6 +165,8 @@ int main(void)
 	old_corection_2=EEpromData.trv_corection_2;
 	Comp_1.modeOfPump=Comp_2.modeOfPump=selmode(&EEpromData);
 	wdt_enable(WDTO_8S);
+	//-------------------------------------
+	sei(); 
 	//-------------------------------------
 	xTaskCreate(ModBus,(const portCHAR *)"ModBus",256,NULL,2, NULL );
 	xTaskCreate(System_1,(const portCHAR *)"System_1",512,NULL,0, &xHandleFirst );
@@ -246,7 +248,7 @@ portEXIT_CRITICAL();
 			//>EEpromData.TimeBetweenDef EEpromData.TimeDef
 			
 			if(EEpromData.AireToWater==1){
-			xSerialxPrintf(&xSerial3Port,"forsDefrost =%d\r\n",forsDefrost);	
+			//xSerialxPrintf(&xSerial3Port,"forsDefrost =%d\r\n",forsDefrost);	
 			if(forsDefrost==1){startDefrost(&Comp_1,&EEpromData);Comp_1.def=true;forsDefrost=0;xSerialxPrintf(&xSerial3Port,"StartForceDEF\r\n");}	
 			if( !Comp_1.def && ((xTaskGetTickCount()-timeTillDef)>EEpromData.TimeBetweenDef *60000) && Comp_1.Src_In<EEpromData.TempDef && forsDefrost==0 ){startDefrost(&Comp_1,&EEpromData);Comp_1.def=true;xSerialxPrintf(&xSerial3Port,"StartDEF\r\n");}//
 			if( Comp_1.def && ((xTaskGetTickCount()-timeTillDef)>EEpromData.TimeDef*60000) && Comp_1.stopdef ){stopDefrost(&Comp_1,&EEpromData);Comp_1.stopdef=Comp_1.def=false;timeTillDef=xTaskGetTickCount();xSerialxPrintf(&xSerial3Port,"StopDEF\r\n");}
@@ -283,7 +285,7 @@ vTaskSuspend( xHandleFirst );
 portENTER_CRITICAL();
 ReadSensors(&Comp_2);
 portEXIT_CRITICAL();
-xSerialxPrintf(&xSerial3Port,"task_2\r\n");
+//xSerialxPrintf(&xSerial3Port,"task_2\r\n");
 //xSerialxPrintf(&xSerial3Port,"TRVcorection2= %d \r\n",EEpromData.trv_corection_2);
 vTaskResume( xHandleFirst );
 		if(EEpromData.power==1 && !Comp_2.suply && !Comp_2.switchToMode){Comp_2.suply=true;xSerialxPrintf(&xSerial3Port,"On_System_2\r\n");}//xTimerStart(xComutateTrv_2, 0);startTrvTimer(&Comp_2);
@@ -313,7 +315,7 @@ static void ModBus(void *pvParameters)
 	while (1)
 	{   
 		//wdt_reset();
-		//xSerialxPrintf(&xSerial3Port,"ModBus_task\r\n");
+		xSerialxPrintf(&xSerial3Port,"ModBus_task\r\n");
 		if (xSemaphoreTake(xMbBinarySemaphore, portMAX_DELAY) == pdTRUE )
 		{
 			modbus_update();
