@@ -17,9 +17,12 @@ int Check_Erors(xCompressor *comp,xEEdata *EElimit)
 		else if ((PIN_HEAT_FLOW_2>0) && comp->srcPOn==1 && comp->Index==2) {return (100+comp->Index);} 	
 		else if ((PIN_SOURCE_FLOW>0) && comp->srcPOn==1 && comp->Index==1) {return (110+comp->Index);} 
 		else if ((PIN_SOURCE_FLOW>0) && comp->srcPOn==1 && comp->Index==2) {return (110+comp->Index);}	
-		else if ( comp->High_Press > 0){return (140+comp->Index);}
-		else if ( comp->Low_Press>0 ) {return (120+comp->Index);}
+		//else if ( comp->High_Press > 0){return (140+comp->Index);}
+		//else if ( comp->Low_Press>0 ) {return (120+comp->Index);}
+		else if ( comp->Low_Press< EElimit->LP_Min ) {return (120+comp->Index);}
+		else if ( comp->High_Press > EElimit->HP_Max){return (140+comp->Index);}	
 		else if ( comp->Bac_Temp > EElimit->HEAT_Max && comp->Heating==1){return (160+comp->Index);}
+		else if ( comp->Bac_Temp < EElimit->HEAT_Min && comp->Cooling==1) {return (170+comp->Index);}	
 		//else if ( comp->Bac_Temp < EElimit->HEAT_Min && comp->Heating==1) {return (170+comp->Index);}
 		//else if ( comp->Bac_Temp > EElimit->Cool_Max && comp->Cooling==1){return (180+comp->Index);}
 		//else if ( comp->Bac_Temp < EElimit->Cool_Min && comp->Cooling==1){return (170+comp->Index);}

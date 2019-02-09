@@ -258,7 +258,7 @@ portEXIT_CRITICAL();
 			
 			if(!init_system){_err1=Check_Erors(&Comp_1,&EEpromData);ADE7758_resetStatus();} else init_system=false;
 				
-			//if(_err1>0 && Comp_1.error==0){Comp_1.error=_err1;Comp_1.countError++;Comp_1.Steps=0;Comp_Stop(&Comp_1);xSerialxPrintf(&xSerial3Port,"error =%d\r\n",Comp_1.error);}//
+			if(_err1>0 && Comp_1.error==0){Comp_1.error=_err1;Comp_1.countError++;Comp_1.Steps=0;Comp_Stop(&Comp_1);xSerialxPrintf(&xSerial3Port,"error =%d\r\n",Comp_1.error);}//
 				
 			 mod_pump(&Comp_1,&EEpromData);
 			//xSerialxPrintf(&xSerial3Port,"error =%d\r\n",Comp_1.error);
@@ -295,7 +295,7 @@ vTaskResume( xHandleFirst );
 		{
 			_err2=Check_Erors(&Comp_2,&EEpromData);
 		
-			//if(_err2>0 && Comp_1.error==0){Comp_2.error=_err2;Comp_2.countError++;Comp_2.Steps=0;Comp_Stop(&Comp_2);}//if(Comp_2.countError==3)EEpromData.power=0;
+			if(_err2>0 && Comp_1.error==0){Comp_2.error=_err2;Comp_2.countError++;Comp_2.Steps=0;Comp_Stop(&Comp_2);}//if(Comp_2.countError==3)EEpromData.power=0;
 			mod_pump(&Comp_2,&EEpromData);
 	       if(Comp_2.checkTrv && xTaskGetTickCount()-countTrvTime_2>10000 ){Comp_2.Steps = Fuzzy(&Comp_2,EEpromData.trv_corection_2);countTrvTime_2=xTaskGetTickCount();}
 		}
