@@ -21,11 +21,11 @@ int Check_Erors(xCompressor *comp,xEEdata *EElimit)
 		// else if ( comp->Low_Press>0 ) {return (120+comp->Index);}
 		 else if ( comp->Low_Press< EElimit->LP_Min ) {return (120+comp->Index);}
 		 else if ( comp->High_Press > EElimit->HP_Max){return (140+comp->Index);}	
-		//else if ( comp->Bac_Temp > EElimit->HEAT_Max && comp->Heating==1){return (160+comp->Index);}
+		 else if ( comp->Bac_Temp > EElimit->HEAT_Max && comp->Heating==1){return (160+comp->Index);}
 		//else if ( comp->Bac_Temp < EElimit->HEAT_Min && comp->Cooling==1) {return (170+comp->Index);}	
 		//else if ( comp->Bac_Temp < EElimit->HEAT_Min && comp->Heating==1) {return (170+comp->Index);}
 		//else if ( comp->Bac_Temp > EElimit->Cool_Max && comp->Cooling==1){return (180+comp->Index);}
-		//else if ( comp->Bac_Temp < EElimit->Cool_Min && comp->Cooling==1){return (170+comp->Index);}
+		else if ( comp->Bac_Temp < EElimit->Cool_Min && comp->Cooling==1){return (170+comp->Index);}
 		//else if ( comp->SuperHeat < EElimit->MinSuperheat && comp->checkTrv) {return (180+comp->Index);}
 		//else if ( comp->SuperHeat > EElimit->MaxSuperheat && comp->checkTrv && !comp->def) {return (190+comp->Index);}
 		//else if ( comp->SuperCool < EElimit->MinSupercool && comp->checkTrv){return (200+comp->Index);}
