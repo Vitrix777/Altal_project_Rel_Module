@@ -143,10 +143,12 @@ int Fuzzy(xCompressor *comp,int corection)
 	comp->trvCorection=corection-steps;
 	if(comp->Index==2)xSerialxPrintf(&xSerial3Port,"TRVcorection_2 = %d \r\n", comp->trvCorection);
 	if(comp->Index==1)xSerialxPrintf(&xSerial3Port,"TRVcorection_1 = %d \r\n", comp->trvCorection);
-	steps=steps+comp->trvCorection;		
-	comp->Steps=steps - comp->Trv_position;
-
-	return comp->Steps;
+	steps=steps+comp->trvCorection;
+	comp->Steps=comp->Trv_position;		
+	//comp->Steps=steps - comp->Trv_position;
+xSerialxPrintf(&xSerial3Port,"Steps = %d \r\n", comp->Steps);
+xSerialxPrintf(&xSerial3Port,"Trv_position = %d \r\n", comp->Trv_position);	
+return (steps - comp->Trv_position);//comp->Steps;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 void calibration(xCompressor *comp)

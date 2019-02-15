@@ -197,7 +197,7 @@ while(1){
 			if(EEpromData.AireToWater==1){
 				
 				if(forsDefrost==1){startDefrost(&Comp_1,&EEpromData);Comp_1.def=true;forsDefrost=0;xSerialxPrintf(&xSerial3Port,"StartForceDEF\r\n");}
-				if( !Comp_1.def && ((xTaskGetTickCount()-timeTillDef)>EEpromData.TimeBetweenDef *60000) && Comp_1.Src_In<EEpromData.TempDef && forsDefrost==0 ){startDefrost(&Comp_1,&EEpromData);Comp_1.def=true;xSerialxPrintf(&xSerial3Port,"StartDEF\r\n");}//
+				if( !Comp_1.def && ((xTaskGetTickCount()-timeTillDef)>EEpromData.TimeBetweenDef *60000) && Comp_1.Temp_Out<EEpromData.TempDef && forsDefrost==0 ){startDefrost(&Comp_1,&EEpromData);Comp_1.def=true;xSerialxPrintf(&xSerial3Port,"StartDEF\r\n");}//
 				if( Comp_1.def && ((xTaskGetTickCount()-timeTillDef)>EEpromData.TimeDef*60000) && Comp_1.stopdef ){stopDefrost(&Comp_1,&EEpromData);Comp_1.stopdef=Comp_1.def=false;timeTillDef=xTaskGetTickCount();xSerialxPrintf(&xSerial3Port,"StopDEF\r\n");}
 				else if(Comp_1.def && Comp_1.Src_In>EEpromData.TempStopDef){stopDefrost(&Comp_1,&EEpromData);Comp_1.stopdef=Comp_1.def=false;timeTillDef=xTaskGetTickCount();xSerialxPrintf(&xSerial3Port,"StopDEF\r\n");}
 	
@@ -233,7 +233,7 @@ portEXIT_CRITICAL();
 		}
 		
 		 if(EEpromData.NombComp==1 && !stop_second){stop_second=true;Comp_Stop(&Comp_2);}
-//xSerialxPrintf(&xSerial3Port,"error =%d\r\n",xTaskGetSchedulerState());
+//xSerialxPrintf(&xSerial3Port,"temp_out =%f\r\n",Comp_1.Temp_Out);
 	
 		if(EEpromData.power==1 && !Comp_1.suply && !Comp_1.switchToMode){Comp_1.suply=true;timeTillDef=xTaskGetTickCount();xSerialxPrintf(&xSerial3Port,"On_System_1\r\n");}//xTimerStart(xComutateTrv_1, 0);xTimerStart(xComutateTrv_1, 0);startTrvTimer(&Comp_1);
 		else if(EEpromData.power==0 && Comp_1.suply){Comp_1.suply=false;PORTA &= 0x0;Comp_1.error=0;_err1=0;Comp_1.countError=0;xSerialxPrintf(&xSerial3Port,"OFF_System_1\r\n"); stopTrvTimer(&Comp_1);Comp_Stop(&Comp_1);}
@@ -246,7 +246,7 @@ portEXIT_CRITICAL();
 		if(Comp_1.suply &&  Comp_1.countError<3)
 		{
 			//>EEpromData.TimeBetweenDef EEpromData.TimeDef
-			
+			/*
 			if(EEpromData.AireToWater==1){
 			//xSerialxPrintf(&xSerial3Port,"forsDefrost =%d\r\n",forsDefrost);	
 			if(forsDefrost==1){startDefrost(&Comp_1,&EEpromData);Comp_1.def=true;forsDefrost=0;xSerialxPrintf(&xSerial3Port,"StartForceDEF\r\n");}	
@@ -255,10 +255,10 @@ portEXIT_CRITICAL();
 			else if(Comp_1.def && Comp_1.Src_In>EEpromData.TempStopDef){stopDefrost(&Comp_1,&EEpromData);Comp_1.stopdef=Comp_1.def=false;timeTillDef=xTaskGetTickCount();xSerialxPrintf(&xSerial3Port,"StopDEF\r\n");}
 			
 			}
-			
+			*/
 			if(!init_system){_err1=Check_Erors(&Comp_1,&EEpromData);ADE7758_resetStatus();} else init_system=false;
 				
-			if(_err1>0 && Comp_1.error==0){Comp_1.error=_err1;Comp_1.countError++;Comp_1.Steps=0;Comp_Stop(&Comp_1);xSerialxPrintf(&xSerial3Port,"error =%d\r\n",Comp_1.error);}//
+			//if(_err1>0 && Comp_1.error==0){Comp_1.error=_err1;Comp_1.countError++;Comp_1.Steps=0;Comp_Stop(&Comp_1);xSerialxPrintf(&xSerial3Port,"error =%d\r\n",Comp_1.error);}//
 				
 			 mod_pump(&Comp_1,&EEpromData);
 			//xSerialxPrintf(&xSerial3Port,"error =%d\r\n",Comp_1.error);
@@ -295,7 +295,7 @@ vTaskResume( xHandleFirst );
 		{
 			_err2=Check_Erors(&Comp_2,&EEpromData);
 		
-			if(_err2>0 && Comp_1.error==0){Comp_2.error=_err2;Comp_2.countError++;Comp_2.Steps=0;Comp_Stop(&Comp_2);}//if(Comp_2.countError==3)EEpromData.power=0;
+			//if(_err2>0 && Comp_1.error==0){Comp_2.error=_err2;Comp_2.countError++;Comp_2.Steps=0;Comp_Stop(&Comp_2);}//if(Comp_2.countError==3)EEpromData.power=0;
 			mod_pump(&Comp_2,&EEpromData);
 	       if(Comp_2.checkTrv && xTaskGetTickCount()-countTrvTime_2>10000 ){Comp_2.Steps = Fuzzy(&Comp_2,EEpromData.trv_corection_2);countTrvTime_2=xTaskGetTickCount();}
 		}
@@ -315,7 +315,7 @@ static void ModBus(void *pvParameters)
 	while (1)
 	{   
 		//wdt_reset();
-		xSerialxPrintf(&xSerial3Port,"ModBus_task\r\n");
+		//xSerialxPrintf(&xSerial3Port,"ModBus_task\r\n");
 		if (xSemaphoreTake(xMbBinarySemaphore, portMAX_DELAY) == pdTRUE )
 		{
 			modbus_update();

@@ -69,6 +69,7 @@ void ReadSensors(xCompressor *comp)
  PORTL |=   (1 << PL0);//A2
  i = samples;
  sum = 0;
+
  do
  {
 	 startAnalogConversion(0, 0);
@@ -78,7 +79,27 @@ void ReadSensors(xCompressor *comp)
  //temp = analogConversionResult();
  temp = (unsigned int) (sum / samples);
  comp->Dhw_Temp = ConvertToTemp(temp);
- 
+  //------------------------------------------
+  
+  //read tempout
+  PORTL |=   (1 << PL2);//A0
+  PORTL &= ~ (1 << PL1);//A1
+  PORTL |=   (1 << PL0);//A2
+  i = samples;
+  sum = 0;
+
+  do
+  {
+	  startAnalogConversion(0, 0);
+	  while( analogIsConverting())_delay_us(25);// portYIELD();
+	  sum += 	analogConversionResult();
+  } while (--i);
+ //temp = analogConversionResult();
+  temp = (unsigned int) (sum / samples);
+  comp->Temp_Out = ConvertToTemp(temp);
+   /*
+  */
+  //------------------------------------------
  if(comp->Index==1){
 	 
 	 //read High_Pressure_1

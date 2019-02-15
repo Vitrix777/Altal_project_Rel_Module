@@ -97,6 +97,8 @@ typedef struct
 	float Cond_Temp;
 	float SuperHeat;
 	float SuperCool;
+	
+	float Temp_Out;
 	//
 
 	float Volt_A;
