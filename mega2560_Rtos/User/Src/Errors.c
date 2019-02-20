@@ -35,10 +35,10 @@ int Check_Erors(xCompressor *comp,xEEdata *EElimit)
 		//else if (abs(comp->Src_In - comp->Src_Out) <  EElimit->Delta_source_min && comp->checkErrors && EEpromData.AireToWater==0) {return (240+comp->Index);}
 		else if (abs(comp->Heat_In - comp->Heat_Out)  > EElimit->Delta_heating_max && comp->checkErrors) {return (250+comp->Index);}
 		else if (abs(comp->Heat_In - comp->Heat_Out) < EElimit->Delta_heating_min &&  comp->checkErrors) {return (260+comp->Index);} 
-		else if (!(ADE7758_getStatus() & ZXA) && EElimit->Power_380==1 && comp->Index==1){return 271;} // ADE7758_resetStatus();
-		else if (!(ADE7758_getStatus() & ZXB) && EElimit->Power_380==1 && comp->Index==1){return 281;}//ADE7758_resetStatus();
-		else if (!(ADE7758_getStatus() & ZXC) && EElimit->Power_380==1 && comp->Index==1){return 291;}//ADE7758_resetStatus();
-		else if (!(ADE7758_getStatus() & SEQERR) && EElimit->Power_380==1 && comp->Index==1){return 301;}//ADE7758_resetStatus();
+		else if (!(ADE7758_getStatus() & ZXA) && EElimit->Power_380==1 ){return 271;} // ADE7758_resetStatus();
+		else if (!(ADE7758_getStatus() & ZXB) && EElimit->Power_380==1 ){return 281;}//ADE7758_resetStatus();
+		else if (!(ADE7758_getStatus() & ZXC) && EElimit->Power_380==1 ){return 291;}//ADE7758_resetStatus();
+		else if (!(ADE7758_getStatus() & SEQERR) && EElimit->Power_380==1){return 301;}//ADE7758_resetStatus();
 		//else if (comp->Src_In > EElimit->Source_Max){return (400+comp->Index);}
 		//else if (comp->Src_In < EElimit->Source_Min){return (410+comp->Index);}			
 		else {return 0;}
