@@ -136,7 +136,7 @@ TickType_t period;
 	if(comp->Index == 2)
 	{
 		Comp_2.error=0;
-		Comp_1.switchToMode=true;
+		Comp_2.switchToMode=true;
 		
 		xSerialxPrintf(&xSerial3Port,"StartSourcePump_2\r\n");
 		
@@ -160,105 +160,131 @@ void StartReversingValve(TimerHandle_t xTimer){
 	portBASE_TYPE *pxTimerID;
 	pxTimerID = pvTimerGetTimerID(xTimer);
 	
-	if((*pxTimerID) == uxStartDelayRevVTimer_1_ID)
+	xSerialxPrintf(&xSerial3Port,"ReversingValve\r\n");
+	
+if((*pxTimerID) == uxStartDelayRevVTimer_1_ID)
 	{	period=(TickType_t)EEpromData.Three_Way_delay;
 		period*=1000;
 		period+=10000;
 		//////////////////////////////////////////
 
-     //xSerialxPrintf(&xSerial3Port,"StartReversingValve\r\n");
+     xSerialxPrintf(&xSerial3Port,"StartReversingValve_1\r\n");
 
 		if(Comp_1.Cooling  )
 		{
-			
-			if(PIN_REV_VALVE_1 >0 && EEpromData.reversMod==1){
+			 xSerialxPrintf(&xSerial3Port,"StartReversingcool_1\r\n");
+			 
+			if( EEpromData.reversMod==1){//PIN_REV_VALVE_1 >0 &&
 				
 				STOP_REV_VALVE_1;//
-				xSerialxPrintf(&xSerial3Port,"StopRevValve_1\r\n");
+				
 				Comp_1.revVOn=0;
+				/*xSerialxPrintf(&xSerial3Port,"StopRevValve_1\r\n");
+				
 				time_count_1+= difftime(time(&current_time), timeStartRevV_1);
 				if(time_count_1>ONE_HOUR){EEpromData.time_revers_1++;eeprom_update_block((const void*)&EEpromData, (void*)0, sizeof (xEEdata));time_count_1=0;}
-				
+				*/
 				
 			}
-			else if(PIN_REV_VALVE_1 == 0 && EEpromData.reversMod==0){
+			else if(EEpromData.reversMod==0){//PIN_REV_VALVE_1 == 0 && 
 				START_REV_VALVE_1;
 				Comp_1.revVOn=1;
+				/*
 				xSerialxPrintf(&xSerial3Port,"StarRevValve_1\r\n");
 				timeStartRevV_1=time(&current_time);
 				EEpromData.number_turnon_revers_1+=1;
+				*/
 			}
+			
 		}
 		if(Comp_1.heatingWater || Comp_1.Heating)
 		{
+			xSerialxPrintf(&xSerial3Port,"StartReversingheast_1\r\n");
 			
-			if(PIN_REV_VALVE_1 > 0 && EEpromData.reversMod==0){//
+			if(EEpromData.reversMod==0){//PIN_REV_VALVE_1 > 0 && 
 				
 				STOP_REV_VALVE_1;
-				
-				xSerialxPrintf(&xSerial3Port,"StopRevValve_1\r\n");
 				Comp_1.revVOn=0;
+				/*
+				xSerialxPrintf(&xSerial3Port,"StopRevValve_1\r\n");
+				
 				time_count_1+= difftime(time(&current_time), timeStartRevV_1);
 				if(time_count_1>ONE_HOUR){EEpromData.time_revers_1++;eeprom_update_block((const void*)&EEpromData, (void*)0, sizeof (xEEdata));time_count_1=0;}
-				
+				*/
 			}
-			else if(PIN_REV_VALVE_1 == 0 && EEpromData.reversMod==1){
+			else if(EEpromData.reversMod==1){//PIN_REV_VALVE_1 == 0 && 
 				START_REV_VALVE_1;
 				Comp_1.revVOn=1;
+				/*
+				
 				xSerialxPrintf(&xSerial3Port,"StopRevValve_1\r\n");
 				timeStartRevV_1=time(&current_time);
 				EEpromData.number_turnon_revers_1+=1;
+				*/
 			}
+			
 		}
 		
 		xTimerChangePeriod( xStartThreeWay,period, 100 );
 		
 	}
-	else if((*pxTimerID) == uxStartDelayRevVTimer_2_ID)
+else if((*pxTimerID) == uxStartDelayRevVTimer_2_ID)
 	{
 		period=(TickType_t)EEpromData.HeatingPump_delay;
 		period*=1000;
-		
+		 xSerialxPrintf(&xSerial3Port,"StartReversingValve_2\r\n");
 		if(Comp_2.Cooling)
-		{
-			if(PIN_REV_VALVE_2 >0 && EEpromData.reversMod==1){
+		{xSerialxPrintf(&xSerial3Port,"StartReversingcool_2\r\n");
+			
+			if(EEpromData.reversMod==1){//PIN_REV_VALVE_2 >0 && 
 				
 				STOP_REV_VALVE_2;//
-				
-				xSerialxPrintf(&xSerial3Port,"StopRevValve_2\r\n");
 				Comp_2.revVOn=0;
+				/*
+				xSerialxPrintf(&xSerial3Port,"StopRevValve_cool2\r\n");
+				
 				time_count_2+= difftime(time(&current_time), timeStartRevV_2);
 				if(time_count_2>ONE_HOUR){EEpromData.time_revers_2++;eeprom_update_block((const void*)&EEpromData, (void*)0, sizeof (xEEdata));time_count_2=0;}
-				
+				*/
 				
 			}
-			else if(PIN_REV_VALVE_2 == 0 && EEpromData.reversMod==0){
+			else if(EEpromData.reversMod==0){//PIN_REV_VALVE_2 == 0 && 
 				START_REV_VALVE_2;
 				Comp_1.revVOn=1;
-				xSerialxPrintf(&xSerial3Port,"StarRevValve_2\r\n");
+				/*
+				
+				xSerialxPrintf(&xSerial3Port,"StarRevValve_cool2\r\n");
 				timeStartRevV_2=time(&current_time);
 				EEpromData.number_turnon_revers_2+=1;
+				*/
 			}
+			
 		}
 		if(Comp_2.Heating)
-		{
-			if(PIN_REV_VALVE_2 > 0 && EEpromData.reversMod==0){//
+		{xSerialxPrintf(&xSerial3Port,"StartReversingheat_2\r\n");
+			
+			if(EEpromData.reversMod==0){//PIN_REV_VALVE_2 > 0 && 
 				
 				STOP_REV_VALVE_2;
-				
-				xSerialxPrintf(&xSerial3Port,"StopRevValve_2\r\n");
 				Comp_2.revVOn=0;
+				/*
+				xSerialxPrintf(&xSerial3Port,"StopRevValve_heat2\r\n");
+				
 				time_count_2+= difftime(time(&current_time), timeStartRevV_2);
 				if(time_count_2>ONE_HOUR){EEpromData.time_revers_2++;eeprom_update_block((const void*)&EEpromData, (void*)0, sizeof (xEEdata));time_count_2=0;}
-				
+				*/
 			}
-			else if(PIN_REV_VALVE_2 == 0 && EEpromData.reversMod==1){
+			else if(EEpromData.reversMod==1){//PIN_REV_VALVE_2 == 0 && 
 				START_REV_VALVE_2;
 				Comp_2.revVOn=1;
-				xSerialxPrintf(&xSerial3Port,"StopRevValve_2\r\n");
+				/*
+				
+				xSerialxPrintf(&xSerial3Port,"StartRevValve_2\r\n");
 				timeStartRevV_2=time(&current_time);
 				EEpromData.number_turnon_revers_2+=1;
+				*/
 			}
+			
 		}
 
 		xTimerChangePeriod( xStartHeatPump_2,period, 100 );
@@ -435,7 +461,7 @@ void Comp_Stop(xCompressor *comp){
 			STOP_COMPRESSOR_2;
 			xSerialxPrintf(&xSerial3Port,"StopCompressor_2\r\n");
 			comp->checkErrors =false;
-			comp->switchToMode=true;
+			//comp->switchToMode=true;
 			comp->checkTrv =false;
 			comp->compOn=0;
 			time_count_2+= difftime(time(&current_time), timeStartComp_2);
@@ -598,8 +624,8 @@ void Revers_Stop(TimerHandle_t xTimer)
 			xSerialxPrintf(&xSerial3Port,"StopRevValve_1\r\n");
 			
 			Comp_1.revVOn=0;
-			time_count_1+= difftime(time(&current_time), timeStartRevV_1);
-			if(time_count_1>ONE_HOUR){EEpromData.time_revers_1++;eeprom_update_block((const void*)&EEpromData, (void*)0, sizeof (xEEdata));time_count_1=0;}
+			//time_count_1+= difftime(time(&current_time), timeStartRevV_1);
+			//if(time_count_1>ONE_HOUR){EEpromData.time_revers_1++;eeprom_update_block((const void*)&EEpromData, (void*)0, sizeof (xEEdata));time_count_1=0;}
 
 		}
 		xTimerChangePeriod( xStopSource_1,period, 100 );
@@ -616,8 +642,8 @@ void Revers_Stop(TimerHandle_t xTimer)
 			
 			
 			Comp_2.revVOn=0;
-			time_count_2+= difftime(time(&current_time), timeStartRevV_2);
-			if(time_count_2>ONE_HOUR){EEpromData.time_revers_2++;eeprom_update_block((const void*)&EEpromData, (void*)0, sizeof (xEEdata));time_count_2=0;}
+			//time_count_2+= difftime(time(&current_time), timeStartRevV_2);
+			//if(time_count_2>ONE_HOUR){EEpromData.time_revers_2++;eeprom_update_block((const void*)&EEpromData, (void*)0, sizeof (xEEdata));time_count_2=0;}
 
 		}
 		xTimerChangePeriod( xStopSource_2,period, 100 );
@@ -662,12 +688,13 @@ void SorcePump_Stop(TimerHandle_t xTimer)
 	else if((*pxTimerID) == uxStopDelaySourcePTimer_2_ID)
 	{
 		//xSerialxPrintf(&xSerial3Port,"StopSource_2\r\n");
+		Comp_2.switchToMode=false ;
 		if(PIN_SOURCE_PUMP_2 > 0)//
 		{
 			STOP_SOURCE_PUMP_2;
 			xSerialxPrintf(&xSerial3Port,"StopSource_2\r\n");
 			Comp_2.srcPOn=0;
-			Comp_2.switchToMode=false;
+			//Comp_2.switchToMode=false;
 			time_count_2+= difftime(time(&current_time), timeStartSrcP_2);
 			if(time_count_2>ONE_HOUR){EEpromData.time_pump_source_2++;eeprom_update_block((const void*)&EEpromData, (void*)0, sizeof (xEEdata));time_count_2=0;}
 
